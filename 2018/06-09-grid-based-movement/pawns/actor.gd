@@ -30,17 +30,21 @@ func move_to(target_position):
 	set_process(false)
 	$AnimationPlayer.play("walk")
 
-	# Move the node to the target cell instantly,
-	# and animate the sprite moving from the start to the target cell
+	# and animate the sprite while moving from the start to the target cell
 	var move_direction = (target_position - position).normalized()
-	$Tween.interpolate_property($Pivot, "position", - move_direction * 32, Vector2(), $AnimationPlayer.current_animation_length, Tween.TRANS_LINEAR, Tween.EASE_IN)
-	position = target_position
+	$Tween.interpolate_property(
+		self,"position",
+		position,target_position,
+		$AnimationPlayer.current_animation_length,
+		Tween.TRANS_LINEAR, Tween.EASE_IN)
 
 	$Tween.start()
 
 	# Stop the function execution until the animation finished
 	yield($AnimationPlayer, "animation_finished")
 	
+	#Updates the position of the Node after the animation stops.
+	position = target_position
 	set_process(true)
 
 
